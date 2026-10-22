@@ -1,0 +1,82 @@
+---
+name: civicfund-radar
+description: Use the `civicfund-radar` CLI to return source-cited candidate non-dilutive funding opportunities for a research lab, startup, nonprofit research group, community climate organization, or technical team. Returns evidence-backed Research Packets and per-candidate provenance. Triggers on `civicfund-radar research`, `civicfund-radar explain`, `civicfund-radar status`, or any need to find federal-grant, state-incentive, topic-page, or public-source funding opportunities matching an organization brief.
+---
+
+# civicfund-radar
+
+A deterministic Go CLI that turns a Research Assignment JSON into an
+evidence-backed candidate list of non-dilutive funding opportunities. The CLI
+does not call an LLM; it operates on a local SQLite ledger refreshed from
+Grants.gov, the Federal Register, public agency RSS feeds, and configured
+public source pages. Final ranking and recommendation judgment belong to the
+calling agent.
+
+## When to use
+
+- An upstream task gave you a lab, startup, nonprofit, or technical-project
+  brief, or a Research Assignment JSON, and you need to surface matching funding
+  opportunities.
+- You need source-cited evidence for one candidate (`explain`).
+- You need to check ledger freshness or source-lane coverage (`status`).
+
+## Public commands
+
+```bash
+# Return candidate opportunities for a Research Assignment
+civicfund-radar research --assignment <path|-> --json
+
+# Show evidence and provenance for one candidate
+civicfund-radar explain <recommendation-id|opportunity-id> --json
+
+# Report ledger freshness and source-lane coverage
+civicfund-radar status --assignment <path> --json
+
+# Self-check: SQLite/FTS5/usearch availability + manifest counts
+civicfund-radar doctor --json
+```
+
+## Common flags
+
+```
+--db <path>            SQLite ledger path (default ~/.local/share/civicfund-radar/civicfund-radar.sqlite)
+--json                 JSON output (default for agent flows)
+--compact              Compact JSON
+--select <fields>      Project top-level paths (comma-separated, dot-pathed)
+--limit N              Result count (default 10 for research)
+--refresh auto|off     Refresh stale source lanes before answering. Default: auto
+--semantic auto|usearch|off   Default: auto (usearch when available, FTS5 fallback)
+--include-inactive     Include closed/archived/past-due records (off by default)
+```
+
+## Notes
+
+- Pipe the assignment JSON via stdin with `--assignment -` rather than writing
+  to a temp file when possible.
+- Always verify `retrieval.no_llm == true` (or `no_llm: true` on explain) in
+  the response — drift guard against future regressions.
+- The CLI is deterministic; the same assignment against the same ledger
+  produces the same packet.
+
+## Where to read more
+
+- Top-level README: <https://github.com/bhavyab212/CIVICFUND-RADAR/blob/main/README.md>
+- Contributor docs: <https://github.com/bhavyab212/CIVICFUND-RADAR/blob/main/AGENTS.md>
+- Schemas: `schemas/research-assignment.schema.json`, `schemas/research-packet.schema.json` in the repo.
+
+## Install
+
+```bash
+# Binary, from the civicfund-radar repository root
+(cd cli/civicfund-radar && go build -o "$HOME/.local/bin/civicfund-radar" ./cmd/civicfund-radar)
+
+# Skill (this file). Refresh old symlinks; do not overwrite custom directories.
+skills_dir="$HOME/.codex/skills"  # or ~/.claude/skills, ~/.agents/skills
+mkdir -p "$skills_dir"
+target="$skills_dir/civicfund-radar"
+if [ -e "$target" ] && [ ! -L "$target" ]; then
+  echo "Existing non-symlink skill path: $target"
+  exit 1
+fi
+ln -sfn "$PWD/skills/civicfund-radar" "$target"
+```

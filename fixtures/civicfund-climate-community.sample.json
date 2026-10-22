@@ -1,0 +1,37 @@
+{
+  "assignment_id": "civicfund-climate-community-2026",
+  "research_question": "Identify federal, state, and foundation grant opportunities for a frontline community organization deploying urban tree canopy, community microgrids, and stormwater resilience infrastructure.",
+  "company_profile": {
+    "name": "Harbor Community Climate Alliance",
+    "description": "A grassroots 501(c)(3) environmental justice and community climate resilience coalition deploying neighborhood microgrids, urban heat island mitigation, coastal green infrastructure, and community workforce development.",
+    "stage": "nonprofit",
+    "location": "United States",
+    "technologies": [
+      "community microgrids",
+      "urban heat island mitigation",
+      "nature-based stormwater solutions",
+      "clean energy transition",
+      "environmental justice"
+    ],
+    "constraints": [
+      "nonprofit 501(c)(3) eligible only",
+      "prefer grants supporting disadvantaged communities (Justice40)",
+      "avoid commercial equity vehicles or venture-matching requirements"
+    ]
+  },
+  "focus_areas": [
+    "clean energy",
+    "climate resilience",
+    "environmental justice",
+    "urban canopy",
+    "community microgrids",
+    "stormwater infrastructure"
+  ],
+  "target_geographies": [
+    "United States",
+    "New York",
+    "New Jersey",
+    "Great Lakes"
+  ],
+  "known_grants": []
+}
